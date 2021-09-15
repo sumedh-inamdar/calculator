@@ -27,16 +27,31 @@ main {
 }
 
 .LHS_Disp {
-    flex: 1 1 1;
+    flex: 1 1 30%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
     border: 2px solid;
-    height: 20px;
     margin: 10px 10px 5px 10px;
 }
 
+.LHS_Disp p{
+    font-size: 12px;
+    margin: 0;
+}
+
 .mainDisp {
-    flex: 1 1 auto;
+    flex: 1 1 70%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
     border: 2px solid;
     margin: 5px 10px 10px 10px;
+}
+
+.mainDisp p {
+    font-size: 28px;
+    margin: 0;
 }
 
 /* Mid Container */
