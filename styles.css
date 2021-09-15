@@ -44,20 +44,22 @@ main {
 .midContainer {
     display: flex;
     justify-content: space-evenly;
-    height: 25px;
+    height: 30px;
     background: greenyellow;
     margin: 10px 0;
+    
 }
 
 .midB {
     width: 75px;
+    font-size: 20px;
 }
 
 .material-icons-outlined {
     font-family: 'Material Icons';
     /* font-weight: normal;
     font-style: normal; */
-    font-size: 18px;  /* Preferred icon size */
+    font-size: 20px;  /* Preferred icon size */
     /* display: inline-block;
     line-height: 1;
     text-transform: none;
@@ -87,13 +89,28 @@ main {
 }
 
 .numPadCont {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
     background: green;
-    flex: 3 1 auto;
+    flex: 1 1 75%;
+    padding: 20px;
+}
+
+.numB {
+    font-size: 28px;
 }
 
 .operandCont {
     display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     background: yellow;
-    flex: 1 1 auto;
+    flex: 1 1 25%;
+    /* padding: 20px; */
+}
+
+.operB {
+    margin: 10px;
+    font-size: 24px;
 }

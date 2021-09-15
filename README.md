@@ -16,10 +16,10 @@ JS
 - [ ] Add keyboard support
 
 HTML / CSS
-- [ ] Create buttons for each digit, operator, and equals key
-- [ ] Create display 
-- [ ] Create button for clear
-- [ ] Create button for backspace
+- [x] Create buttons for each digit, operator, and equals key
+- [x] Create display 
+- [x] Create button for clear
+- [x] Create button for backspace
 - [ ] Add styling (after above complete)
 - [ ] Fix top margin issue when reducing viewport
 
