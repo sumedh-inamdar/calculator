@@ -116,13 +116,12 @@ main {
     font-size: 28px;
 }
 
-.operandCont {
+.operatorCont {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     background: yellow;
     flex: 1 1 25%;
-    /* padding: 20px; */
 }
 
 .operB {
