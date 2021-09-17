@@ -1,3 +1,7 @@
+/* Created by Sumedh Inamdar
+See calcStates.numbers for state transition table
+*/
+
 // Global variables
 let calc = {
     operand1: null,
@@ -24,16 +28,23 @@ const mainDisp = document.querySelector('.mainDisp p');
 const miniDisp = document.querySelector('.LHS_Disp');
 
 // Add event listeners for buttons
+clear.addEventListener('click', clearHandler);
 plusMinus.addEventListener('click', () => {
-    mainDisp.textContent *= -1;
+    if (mainDisp.textContent) {
+        mainDisp.textContent *= -1;
+    }
+    
 });
+percent.addEventListener('click', percentHandler);
+backspace.addEventListener('click', () => updateMainDisp(mainDisp.textContent.slice(0, -1)));
 nums.forEach(num => {
     num.addEventListener('click', numberHandler);
 });
 decimal.addEventListener('click', (e) => {
     if (!mainDisp.textContent.includes('.')) {
-        if (mainDisp.textContent === '') {
-            mainDisp.textContent += '0';
+        if (mainDisp.textContent === '' || mainDisp.textContent === '0') {
+            mainDisp.textContent = '0.';
+            return;
         }
         numberHandler(e);
     }
@@ -43,10 +54,21 @@ operators.forEach(oper => {
     oper.addEventListener('click', operationHandler)
 });
 
-
 // Event handler functions
+function clearHandler(event) {
+    if (mainDisp.textContent) {
+        updateMainDisp(null);
+        return;
+    } else {
+        for (let key in calc) calc[key] = null;
+        updateMiniDisp();
+    }
+}
+function percentHandler(event) {
+    
+}
 function numberHandler(event) {
-    if (mainDisp.textContent == '') {
+    if (mainDisp.textContent === '' || mainDisp.textContent === '0') {
         mainDisp.textContent = event.target.value;
     } else {
         mainDisp.textContent += event.target.value;
@@ -60,18 +82,16 @@ function equalHandler(event) {
         updateMainDisp(calc.total);
     }
 }
-function operationHandler(event) {    
-    if (mainDisp.textContent || miniDisp.textContent) { // ignore click if no operand input yet
-        if (!calc.operand1) {
+function operationHandler(event) {    // Transition to state 3
+    if (mainDisp.textContent || miniDisp.textContent) { // Handle transition from state 1
+        if (allSameBool(Object.values(calc))) { // Handles transition from state 2 and 5
             storeMainDispValIn('operand1');
-        } else if (!calc.operand2) {
+        } else if (mainDisp.textContent) { // Handle transition from state 4
             storeMainDispValIn('operand2');
-            calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);
-            calc.operand1 = calc.total;
-            calc.operand2 = null;
-        } else {
-            return;
+            calc.operand1 = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);
         }
+        calc.operand2 = null;
+        calc.total = null;
         calc.operatorTarget = event.target;
         updateMiniDisp();
         updateMainDisp(null);
@@ -80,11 +100,15 @@ function operationHandler(event) {
 }
 
 // helper functions
+function allSameBool(arr) {
+    return arr.every(val => Boolean(val) === Boolean(arr[0])); 
+}
 function storeMainDispValIn(key) {
     calc[key] = Number(mainDisp.textContent);
 }
 function updateMiniDisp() {
-    miniDisp.textContent = calc.operand1 + ' ' + calc.operatorTarget.textContent + ' '; 
+    miniDisp.textContent = calc.operand1 ? calc.operand1 + ' ' : '';
+    miniDisp.textContent += calc.operatorTarget ? calc.operatorTarget.textContent + ' ' : ''; 
     miniDisp.textContent += calc.operand2 ? calc.operand2 + ' = ': '';
 }
 function updateMainDisp(str) {
@@ -118,7 +142,7 @@ function factorial(num) {
 
 };
 function operate(operator, a, b) {
-    return operator(a, b);
+    return Math.round(operator(a, b) * 100) / 100;
 }
 
 // Startup sequence
