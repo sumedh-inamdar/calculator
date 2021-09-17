@@ -65,7 +65,18 @@ function clearHandler(event) {
     }
 }
 function percentHandler(event) {
-    
+    if (calc.operand1 && calc.operatorTarget && mainDisp.textContent) {
+        calc.operand2 = mainDisp.textContent;
+        const operation = calc.operatorTarget.value;
+        if (operation === 'add' || operation === 'subtract') {
+            calc.total = operate(window[calc.operatorTarget.value], calc.operand1, (calc.operand1*calc.operand2)/100);
+        } else {
+            calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2/100);
+        }
+        calc.operand2 += '%';
+        updateMiniDisp();
+        updateMainDisp(calc.total);
+    }
 }
 function numberHandler(event) {
     if (mainDisp.textContent === '' || mainDisp.textContent === '0') {
