@@ -19,13 +19,12 @@ const nums = document.querySelectorAll('[name="number"]');
 const decimal = document.querySelector('[value="."]');
 const equals = document.querySelector('#equals');
 const operators = document.querySelectorAll('.basicOper');
-
 // const powerNode = document.querySelector('#power');
 // const factorialNode = document.querySelector('#factorial');
 
 // Display Nodes
 const mainDisp = document.querySelector('.mainDisp p');
-const miniDisp = document.querySelector('.LHS_Disp');
+const miniDisp = document.querySelector('.LHS_Disp p');
 
 // Add event listeners for buttons
 clear.addEventListener('click', clearHandler);
@@ -53,20 +52,24 @@ equals.addEventListener('click', equalHandler);
 operators.forEach(oper => {
     oper.addEventListener('click', operationHandler)
 });
+// powerNode.addEventListener('click', operationHandler);
 
 // Event handler functions
 function clearHandler(event) {
     if (mainDisp.textContent) {
+        if (calc.operand2) {
+            for (let key in calc) calc[key] = null;
+            updateMiniDisp();
+        }
         updateMainDisp(null);
-        return;
     } else {
         for (let key in calc) calc[key] = null;
         updateMiniDisp();
     }
 }
 function percentHandler(event) {
-    if (calc.operand1 && calc.operatorTarget && mainDisp.textContent) {
-        calc.operand2 = mainDisp.textContent;
+    if (calc.operand1 && calc.operatorTarget && mainDisp.textContent && !calc.operand2 && calc.operatorTarget.value !== 'power') {
+        storeMainDispValIn('operand2');
         const operation = calc.operatorTarget.value;
         if (operation === 'add' || operation === 'subtract') {
             calc.total = operate(window[calc.operatorTarget.value], calc.operand1, (calc.operand1*calc.operand2)/100);
@@ -80,13 +83,13 @@ function percentHandler(event) {
 }
 function numberHandler(event) {
     if (mainDisp.textContent === '' || mainDisp.textContent === '0') {
-        mainDisp.textContent = event.target.value;
+        updateMainDisp(event.target.value);
     } else {
-        mainDisp.textContent += event.target.value;
+        updateMainDisp(mainDisp.textContent + event.target.value)
     }
 }
 function equalHandler(event) {
-    if(calc.operand1 && mainDisp.textContent && calc.operatorTarget) {
+    if(calc.operand1 && mainDisp.textContent && calc.operatorTarget && !calc.operand2) {
         storeMainDispValIn('operand2');
         calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);
         updateMiniDisp();
@@ -106,8 +109,10 @@ function operationHandler(event) {    // Transition to state 3
         calc.operatorTarget = event.target;
         updateMiniDisp();
         updateMainDisp(null);
-        
     }
+}
+function powerHandler(event) {
+
 }
 
 // helper functions
@@ -119,7 +124,16 @@ function storeMainDispValIn(key) {
 }
 function updateMiniDisp() {
     miniDisp.textContent = calc.operand1 ? calc.operand1 + ' ' : '';
-    miniDisp.textContent += calc.operatorTarget ? calc.operatorTarget.textContent + ' ' : ''; 
+    if (calc.operatorTarget) {
+        if (calc.operatorTarget.value === 'power') {
+            const sup = document.createElement('sup');
+            sup.textContent = calc.operand2 ? calc.operand2 + ' = ' : '^';
+            miniDisp.appendChild(sup);
+            return;
+        } else {
+            miniDisp.textContent += calc.operatorTarget.textContent + ' ';        
+        }
+    }
     miniDisp.textContent += calc.operand2 ? calc.operand2 + ' = ': '';
 }
 function updateMainDisp(str) {
