@@ -7,7 +7,9 @@ let calc = {
     operand1: null,
     operand2: null,
     operatorTarget: null,
-    total: null
+    total: null,
+    clearMainDisp: true,
+    clearMiniDisp: true
 }
 
 // Button Nodes
@@ -19,7 +21,6 @@ const nums = document.querySelectorAll('[name="number"]');
 const decimal = document.querySelector('[value="."]');
 const equals = document.querySelector('#equals');
 const operators = document.querySelectorAll('.basicOper');
-// const powerNode = document.querySelector('#power');
 // const factorialNode = document.querySelector('#factorial');
 
 // Display Nodes
@@ -31,11 +32,12 @@ clear.addEventListener('click', clearHandler);
 plusMinus.addEventListener('click', () => {
     if (mainDisp.textContent) {
         mainDisp.textContent *= -1;
+        mainDisp.textContent = '(' + mainDisp.textContent + ')';
     }
     
 });
 percent.addEventListener('click', percentHandler);
-backspace.addEventListener('click', () => updateMainDisp(mainDisp.textContent.slice(0, -1)));
+backspace.addEventListener('click', backspaceHandler);
 nums.forEach(num => {
     num.addEventListener('click', numberHandler);
 });
@@ -52,19 +54,16 @@ equals.addEventListener('click', equalHandler);
 operators.forEach(oper => {
     oper.addEventListener('click', operationHandler)
 });
-// powerNode.addEventListener('click', operationHandler);
 
 // Event handler functions
 function clearHandler(event) {
     if (mainDisp.textContent) {
         if (calc.operand2) {
-            for (let key in calc) calc[key] = null;
-            updateMiniDisp();
+            clearMiniDisp();
         }
         updateMainDisp(null);
     } else {
-        for (let key in calc) calc[key] = null;
-        updateMiniDisp();
+        clearMiniDisp();
     }
 }
 function percentHandler(event) {
@@ -79,11 +78,26 @@ function percentHandler(event) {
         calc.operand2 += '%';
         updateMiniDisp();
         updateMainDisp(calc.total);
+        calc.clearMainDisp = true;
+        calc.clearMiniDisp = true;
+    }
+}
+function backspaceHandler(event) {
+    if (calc.clearMiniDisp && calc.clearMainDisp) {
+        clearHandler(event);
+    } else {
+        updateMainDisp(mainDisp.textContent.slice(0, -1));
     }
 }
 function numberHandler(event) {
-    if (mainDisp.textContent === '' || mainDisp.textContent === '0') {
+    // if (mainDisp.textContent === '' || mainDisp.textContent === '0') 
+    if (calc.clearMainDisp) {
         updateMainDisp(event.target.value);
+        calc.clearMainDisp = false;
+        if (calc.clearMiniDisp) {
+            clearMiniDisp();
+            calc.clearMiniDisp = false;
+        }
     } else {
         updateMainDisp(mainDisp.textContent + event.target.value)
     }
@@ -94,6 +108,8 @@ function equalHandler(event) {
         calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);
         updateMiniDisp();
         updateMainDisp(calc.total);
+        calc.clearMainDisp = true;
+        calc.clearMiniDisp = true;
     }
 }
 function operationHandler(event) {    // Transition to state 3
@@ -107,34 +123,49 @@ function operationHandler(event) {    // Transition to state 3
         calc.operand2 = null;
         calc.total = null;
         calc.operatorTarget = event.target;
+        calc.clearMainDisp = true;
+        calc.clearMainDisp = false;
         updateMiniDisp();
         updateMainDisp(null);
     }
 }
-function powerHandler(event) {
 
-}
 
 // helper functions
 function allSameBool(arr) {
     return arr.every(val => Boolean(val) === Boolean(arr[0])); 
 }
 function storeMainDispValIn(key) {
-    calc[key] = Number(mainDisp.textContent);
+    calc[key] = Number(mainDisp.textContent.match(/-?\d+[.]?\d*/));
 }
 function updateMiniDisp() {
-    miniDisp.textContent = calc.operand1 ? calc.operand1 + ' ' : '';
-    if (calc.operatorTarget) {
+
+    if (calc.operand1) {
+        miniDisp.textContent = calc.operand1 < 0 ? '(' + calc.operand1 + ')' : calc.operand1;     
+    } else {
+        miniDisp.textContent = '';
+    }
+
+    if (calc.operatorTarget) { 
         if (calc.operatorTarget.value === 'power') {
             const sup = document.createElement('sup');
             sup.textContent = calc.operand2 ? calc.operand2 + ' = ' : '^';
             miniDisp.appendChild(sup);
             return;
         } else {
-            miniDisp.textContent += calc.operatorTarget.textContent + ' ';        
+            miniDisp.textContent += ' ' + calc.operatorTarget.textContent + ' ';        
         }
     }
-    miniDisp.textContent += calc.operand2 ? calc.operand2 + ' = ': '';
+
+    if (calc.operand2) {
+        miniDisp.textContent += calc.operand2 < 0 ? '(' + calc.operand2 + ') = ' : calc.operand2 + ' = ';
+    } else {
+        miniDisp.textContent += '';
+    }
+}
+function clearMiniDisp() {
+    for (let key in calc) calc[key] = null;
+    updateMiniDisp();
 }
 function updateMainDisp(str) {
     mainDisp.textContent = str;
