@@ -21,7 +21,7 @@ const nums = document.querySelectorAll('[name="number"]');
 const decimal = document.querySelector('[value="."]');
 const equals = document.querySelector('#equals');
 const operators = document.querySelectorAll('.basicOper');
-// const factorialNode = document.querySelector('#factorial');
+const factorialNode = document.querySelector('[value="factorial"]');
 
 // Display Nodes
 const mainDisp = document.querySelector('.mainDisp p');
@@ -31,8 +31,10 @@ const miniDisp = document.querySelector('.LHS_Disp p');
 clear.addEventListener('click', clearHandler);
 plusMinus.addEventListener('click', () => {
     if (mainDisp.textContent) {
-        mainDisp.textContent *= -1;
-        mainDisp.textContent = '(' + mainDisp.textContent + ')';
+        let numOnDisp = mainDisp.textContent.match(/-?\d+[.]?\d*/);
+        numOnDisp *= -1;
+        numOnDisp = numOnDisp < 0 ? '(' + numOnDisp + ')' : numOnDisp;
+        updateMainDisp(numOnDisp);
     }
     
 });
@@ -54,6 +56,7 @@ equals.addEventListener('click', equalHandler);
 operators.forEach(oper => {
     oper.addEventListener('click', operationHandler)
 });
+factorialNode.addEventListener('click', factorialHandler);
 
 // Event handler functions
 function clearHandler(event) {
@@ -91,7 +94,7 @@ function backspaceHandler(event) {
 }
 function numberHandler(event) {
     // if (mainDisp.textContent === '' || mainDisp.textContent === '0') 
-    if (calc.clearMainDisp) {
+    if (calc.clearMainDisp || mainDisp.textContent === '' || mainDisp.textContent === '0') {
         updateMainDisp(event.target.value);
         calc.clearMainDisp = false;
         if (calc.clearMiniDisp) {
@@ -113,8 +116,8 @@ function equalHandler(event) {
     }
 }
 function operationHandler(event) {    // Transition to state 3
-    if (mainDisp.textContent || miniDisp.textContent) { // Handle transition from state 1
-        if (allSameBool(Object.values(calc))) { // Handles transition from state 2 and 5
+    if (mainDisp.textContent || miniDisp.textContent) { // reject transition from state 1
+        if (allSameBool(Object.values(calc))) { // accept transition from state 2 and 5
             storeMainDispValIn('operand1');
         } else if (mainDisp.textContent) { // Handle transition from state 4
             storeMainDispValIn('operand2');
@@ -122,12 +125,34 @@ function operationHandler(event) {    // Transition to state 3
         }
         calc.operand2 = null;
         calc.total = null;
-        calc.operatorTarget = event.target;
+        calc.operatorTarget = event.target.value ? event.target : event.target.parentNode;
         calc.clearMainDisp = true;
-        calc.clearMainDisp = false;
+        calc.clearMiniDisp = false;
         updateMiniDisp();
         updateMainDisp(null);
     }
+}
+function factorialHandler(event) { //transition to state 6
+    if (mainDisp.textContent || miniDisp.textContent) { //reject transition from state 1
+        if (allSameBool(Object.values(calc)) || calc.total) { // accept transition from state 2, 5, and 6
+            storeMainDispValIn('operand1');
+            calc.total = calc.operand1 > 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
+            calc.operatorTarget = event.target;
+            calc.operand2 = null;
+        } else if(mainDisp.textContent) { //handle transition from state 4
+            storeMainDispValIn('operand2');
+            calc.operand2 = calc.operand2 > 0 ? factorial(Math.abs(calc.operand2)) : -1 * factorial(Math.abs(calc.operand2));
+            calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);     
+        } else { //handle transition from state 3
+            calc.total = calc.operand1 > 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
+            calc.operatorTarget = event.target;
+        }
+        calc.clearMainDisp = true;
+        calc.clearMiniDisp = true;
+        updateMiniDisp();
+        updateMainDisp(calc.total);
+    }
+
 }
 
 
@@ -152,6 +177,9 @@ function updateMiniDisp() {
             sup.textContent = calc.operand2 ? calc.operand2 + ' = ' : '^';
             miniDisp.appendChild(sup);
             return;
+        } else if (calc.operatorTarget.value === 'factorial') {
+            miniDisp.textContent += '! = ';
+
         } else {
             miniDisp.textContent += ' ' + calc.operatorTarget.textContent + ' ';        
         }

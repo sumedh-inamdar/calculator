@@ -10,9 +10,10 @@ JS
 - [x] Create functions for math operators
 - [x] Create function "operate" that takes 2 numbers and operator and calls operator above
 - [x] Create function to populate display when number button is clicked and update display variable 
-- [ ] Store display number and operation once operator is triggered
-- [ ] Call operate once second number 
-- [ ] Clear button: 1st click for clearing mainDisp, 2nd click for clearing LHS_Disp
+- [x] Store display number and operation once operator is triggered
+- [x] Call operate once second number 
+- [x] Clear button: 1st click for clearing mainDisp, 2nd click for clearing LHS_Disp
+- [ ] Add factorial function
 - [ ] Add keyboard support
 
 HTML / CSS

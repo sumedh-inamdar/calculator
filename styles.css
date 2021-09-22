@@ -1,4 +1,6 @@
-
+html {
+    background-color: rgb(53, 53, 53);
+}
 main {
     display: flex;
     height: 75vh;
