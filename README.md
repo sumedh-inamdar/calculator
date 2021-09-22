@@ -6,6 +6,12 @@ The classic simple calculator.
 
 To do list:
 
+Bugs to fix
+- [ ] Factorial->Equals
+- [ ] Factorial->clear(1 click)->Factorial
+- [ ] Handling of invalid inputs (NaN, Inf)
+- [ ] Division by zero
+
 JS
 - [x] Create functions for math operators
 - [x] Create function "operate" that takes 2 numbers and operator and calls operator above
@@ -13,8 +19,9 @@ JS
 - [x] Store display number and operation once operator is triggered
 - [x] Call operate once second number 
 - [x] Clear button: 1st click for clearing mainDisp, 2nd click for clearing LHS_Disp
-- [ ] Add factorial function
+- [x] Add factorial function
 - [ ] Add keyboard support
+- [ ] Add gamma function to support factorial of non-integer values
 
 HTML / CSS
 - [x] Create buttons for each digit, operator, and equals key

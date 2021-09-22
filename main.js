@@ -133,7 +133,7 @@ function operationHandler(event) {    // Transition to state 3
     }
 }
 function factorialHandler(event) { //transition to state 6
-    if (mainDisp.textContent || miniDisp.textContent) { //reject transition from state 1
+    if (mainDisp.textContent || miniDisp.textContent) { //reject transition from state 1 and mainDisp 
         if (allSameBool(Object.values(calc)) || calc.total) { // accept transition from state 2, 5, and 6
             storeMainDispValIn('operand1');
             calc.total = calc.operand1 > 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
@@ -217,13 +217,15 @@ function power(a, b) {
 	return a ** b;
 };
 function factorial(num) {
-	let total = 1;
-  while (num > 0) {
-    total *= num;
-    num--;
-  }
-  return total;
-
+    if (Number.isInteger(num)) {
+        let total = 1;
+        while (num > 0) {
+          total *= num;
+          num--;
+        }
+        return total;
+    }
+    return Number.NaN;
 };
 function operate(operator, a, b) {
     return Math.round(operator(a, b) * 100) / 100;
