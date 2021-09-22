@@ -7,9 +7,9 @@ The classic simple calculator.
 To do list:
 
 Bugs to fix
-- [ ] Factorial->Equals
-- [ ] Factorial->clear(1 click)->Factorial
-- [ ] Handling of invalid inputs (NaN, Inf)
+- [x] Factorial->Equals
+- [x] Factorial->clear(1 click)->Factorial
+- [ ] Handling of invalid display (NaN, Inf)
 - [ ] Division by zero
 
 JS

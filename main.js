@@ -64,6 +64,7 @@ function clearHandler(event) {
         if (calc.operand2) {
             clearMiniDisp();
         }
+        calc.total = null;
         updateMainDisp(null);
     } else {
         clearMiniDisp();
@@ -106,7 +107,7 @@ function numberHandler(event) {
     }
 }
 function equalHandler(event) {
-    if(calc.operand1 && mainDisp.textContent && calc.operatorTarget && !calc.operand2) {
+    if(calc.operand1 && mainDisp.textContent && calc.operatorTarget && !calc.operand2 && !calc.total) {
         storeMainDispValIn('operand2');
         calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);
         updateMiniDisp();
