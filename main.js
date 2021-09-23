@@ -60,8 +60,8 @@ factorialNode.addEventListener('click', factorialHandler);
 
 // Event handler functions
 function clearHandler(event) {
-    if (mainDisp.textContent) {
-        if (calc.operand2) {
+    if (isValidNum(mainDisp.textContent)) {
+        if (isValidNum(calc.operand2)) {
             clearMiniDisp();
         }
         calc.total = null;
@@ -71,7 +71,7 @@ function clearHandler(event) {
     }
 }
 function percentHandler(event) {
-    if (calc.operand1 && calc.operatorTarget && mainDisp.textContent && !calc.operand2 && calc.operatorTarget.value !== 'power') {
+    if (isValidNum(calc.operand1) && calc.operatorTarget && isValidNum(mainDisp.textContent) && !isValidNum(calc.operand2) && calc.operatorTarget.value !== 'power') {
         storeMainDispValIn('operand2');
         const operation = calc.operatorTarget.value;
         if (operation === 'add' || operation === 'subtract') {
@@ -107,20 +107,20 @@ function numberHandler(event) {
     }
 }
 function equalHandler(event) {
-    if(calc.operand1 && mainDisp.textContent && calc.operatorTarget && !calc.operand2 && !calc.total) {
+    if(isValidNum(calc.operand1) && isValidNum(mainDisp.textContent) && calc.operatorTarget && !isValidNum(calc.operand2) && !isValidNum(calc.total)) {
         storeMainDispValIn('operand2');
         calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);
         updateMiniDisp();
         updateMainDisp(calc.total);
-        calc.clearMainDisp = true;
-        calc.clearMiniDisp = true;
+        resetCalc();
+
     }
 }
 function operationHandler(event) {    // Transition to state 3
-    if (mainDisp.textContent || miniDisp.textContent) { // reject transition from state 1
-        if (allSameBool(Object.values(calc))) { // accept transition from state 2 and 5
+    if (isValidNum(mainDisp.textContent) || isValidNum(miniDisp.textContent)) { // reject transition from state 1
+        if (isNull([calc.operand1, calc.operand2, calc.operatorTarget, calc.total])) { // accept transition from state 2, 5, and 6
             storeMainDispValIn('operand1');
-        } else if (mainDisp.textContent) { // Handle transition from state 4
+        } else if (isValidNum(mainDisp.textContent)) { // Handle transition from state 4
             storeMainDispValIn('operand2');
             calc.operand1 = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);
         }
@@ -134,13 +134,13 @@ function operationHandler(event) {    // Transition to state 3
     }
 }
 function factorialHandler(event) { //transition to state 6
-    if (mainDisp.textContent || miniDisp.textContent) { //reject transition from state 1 and mainDisp 
-        if (allSameBool(Object.values(calc)) || calc.total) { // accept transition from state 2, 5, and 6
+    if (isValidNum(mainDisp.textContent) || isValidNum(miniDisp.textContent)) { //reject transition from state 1 and mainDisp 
+        if (isNull([calc.operand1, calc.operand2, calc.operatorTarget, calc.total])) { // accept transition from state 2, 5, and 6
             storeMainDispValIn('operand1');
             calc.total = calc.operand1 > 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
             calc.operatorTarget = event.target;
             calc.operand2 = null;
-        } else if(mainDisp.textContent) { //handle transition from state 4
+        } else if(isValidNum(mainDisp.textContent)) { //handle transition from state 4
             storeMainDispValIn('operand2');
             calc.operand2 = calc.operand2 > 0 ? factorial(Math.abs(calc.operand2)) : -1 * factorial(Math.abs(calc.operand2));
             calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);     
@@ -148,25 +148,36 @@ function factorialHandler(event) { //transition to state 6
             calc.total = calc.operand1 > 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
             calc.operatorTarget = event.target;
         }
-        calc.clearMainDisp = true;
-        calc.clearMiniDisp = true;
         updateMiniDisp();
         updateMainDisp(calc.total);
+        resetCalc();
     }
 
 }
 
 
 // helper functions
-function allSameBool(arr) {
-    return arr.every(val => Boolean(val) === Boolean(arr[0])); 
+function resetCalc() {
+    calc.operand1 = null;
+    calc.operand2 = null;
+    calc.operatorTarget = null;
+    calc.total = null;
+    calc.clearMainDisp = true;
+    calc.clearMiniDisp = true;
+}
+function isValidNum(input) {
+    const regex = /-?\d+[.]?\d*/;
+    return regex.test(input);
+}
+function isNull(arr) {
+    return arr.every(val => !val); 
 }
 function storeMainDispValIn(key) {
     calc[key] = Number(mainDisp.textContent.match(/-?\d+[.]?\d*/));
 }
 function updateMiniDisp() {
 
-    if (calc.operand1) {
+    if (calc.operand1 !== null) {
         miniDisp.textContent = calc.operand1 < 0 ? '(' + calc.operand1 + ')' : calc.operand1;     
     } else {
         miniDisp.textContent = '';
@@ -186,7 +197,7 @@ function updateMiniDisp() {
         }
     }
 
-    if (calc.operand2) {
+    if (calc.operand2 !== null) {
         miniDisp.textContent += calc.operand2 < 0 ? '(' + calc.operand2 + ') = ' : calc.operand2 + ' = ';
     } else {
         miniDisp.textContent += '';
