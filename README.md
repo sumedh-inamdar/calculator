@@ -11,8 +11,8 @@ Bugs to fix
 - [x] Factorial->clear(1 click)->Factorial
 - [x] 0->Operator or operation that equals 0->operator
 - [x] Num->Operator->Num->Percent->Operator
-- [ ] Handling of invalid display (NaN, Inf)
-- [ ] Division by zero
+- [ ] Handling of invalid display (NaN, Inf) -> Update storeMainDispValIn to check for invalid display and alert user accordingly
+- [ ] Division by zero -> Update division function to check for zero input and alert user accordingly
 
 JS
 - [x] Create functions for math operators
