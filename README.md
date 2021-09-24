@@ -10,7 +10,7 @@ Bugs to fix
 - [x] Factorial->Equals
 - [x] Factorial->clear(1 click)->Factorial
 - [x] 0->Operator or operation that equals 0->operator
-- [ ] Num->Operator->Num->Percent->Operator
+- [x] Num->Operator->Num->Percent->Operator
 - [ ] Handling of invalid display (NaN, Inf)
 - [ ] Division by zero
 

@@ -82,8 +82,7 @@ function percentHandler(event) {
         calc.operand2 += '%';
         updateMiniDisp();
         updateMainDisp(calc.total);
-        calc.clearMainDisp = true;
-        calc.clearMiniDisp = true;
+        resetCalc();
     }
 }
 function backspaceHandler(event) {
@@ -133,7 +132,7 @@ function operationHandler(event) {    // Transition to state 3
         updateMainDisp(null);
     }
 }
-function factorialHandler(event) { //transition to state 6
+function factorialHandler(event) {
     if (isValidNum(mainDisp.textContent) || isValidNum(miniDisp.textContent)) { //reject transition from state 1 and mainDisp 
         if (isNull([calc.operand1, calc.operand2, calc.operatorTarget, calc.total])) { // accept transition from state 2, 5, and 6
             storeMainDispValIn('operand1');
