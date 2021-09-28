@@ -29,45 +29,83 @@ const miniDisp = document.querySelector('.LHS_Disp p');
 
 // Add event listeners for buttons
 clear.addEventListener('click', clearHandler);
-plusMinus.addEventListener('click', () => {
-    if (mainDisp.textContent) {
-        let numOnDisp = mainDisp.textContent.match(/-?\d+[.]?\d*/);
-        numOnDisp *= -1;
-        numOnDisp = numOnDisp < 0 ? '(' + numOnDisp + ')' : numOnDisp;
-        updateMainDisp(numOnDisp);
-    }
-    
-});
+plusMinus.addEventListener('click', plusMinusHandler);
 percent.addEventListener('click', percentHandler);
 backspace.addEventListener('click', backspaceHandler);
 nums.forEach(num => {
     num.addEventListener('click', numberHandler);
 });
-decimal.addEventListener('click', (e) => {
-    if (!mainDisp.textContent.includes('.')) {
-        if (mainDisp.textContent === '' || mainDisp.textContent === '0') {
-            mainDisp.textContent = '0.';
-            return;
-        }
-        numberHandler(e);
-    }
-});
+decimal.addEventListener('click', decimalHandler);
 equals.addEventListener('click', equalHandler);
 operators.forEach(oper => {
     oper.addEventListener('click', operationHandler)
 });
 factorialNode.addEventListener('click', factorialHandler);
 
+//Event listener for keyPress
+window.addEventListener('keydown', e => {
+    if (document.querySelector(`[value='${e.key}']`) && isValidNum(e.key)) {
+        return numberHandler(e, e.key);
+    }
+    if (e.key === '.') {
+        return decimalHandler(e);
+    }
+    if (e.key === '=') {
+        return equalHandler(e);
+    }
+    if (e.key === '+') {
+        return operationHandler(e, document.querySelector('[value="add"]'));
+    }
+    if (e.key === '-') {
+        return operationHandler(e, document.querySelector('[value="subtract"]'));
+    }
+    if (e.key === '*') {
+        return operationHandler(e, document.querySelector('[value="multiply"]'));
+    }
+    if (e.key === '/') {
+        return operationHandler(e, document.querySelector('[value="divide"]'));
+    }
+    if (e.key === '^') {
+        return operationHandler(e, document.querySelector('[value="power"]'));
+    }
+    if (e.key === '!') {
+        return factorialHandler(e, document.querySelector('[value="factorial"]'));
+    }
+    if (e.key === 'Enter') {
+        return equalHandler(e);
+    }
+    if (e.key === 'c') {
+        return clearHandler(e);
+    }
+    if (e.key === 'Backspace') {
+        return backspaceHandler(e);
+    }
+    if (e.key === '–') {
+        return plusMinusHandler(e);
+    }
+    if (e.key === '%') {
+        return percentHandler(e);
+    }
+})
+
 // Event handler functions
 function clearHandler(event) {
-    if (isValidNum(mainDisp.textContent)) {
-        if (isValidNum(calc.operand2)) {
+    if (isValidNum(mainDisp.textContent) || calc.clearMainDisp) {
+        if (isValidNum(calc.operand2) || calc.clearMiniDisp) {
             clearMiniDisp();
         }
         calc.total = null;
         updateMainDisp(null);
     } else {
         clearMiniDisp();
+    }
+}
+function plusMinusHandler(event) {
+    if (isValidNum(mainDisp.textContent)) {
+        let numOnDisp = mainDisp.textContent.match(/-?\d+[.]?\d*/);
+        numOnDisp *= -1;
+        // numOnDisp = numOnDisp < 0 ? '(' + numOnDisp + ')' : numOnDisp;
+        updateMainDisp(numOnDisp);
     }
 }
 function percentHandler(event) {
@@ -86,23 +124,37 @@ function percentHandler(event) {
     }
 }
 function backspaceHandler(event) {
-    if (calc.clearMiniDisp && calc.clearMainDisp) {
+    if ((calc.clearMiniDisp && calc.clearMainDisp) || !isValidNum(mainDisp.textContent)) {
         clearHandler(event);
     } else {
         updateMainDisp(mainDisp.textContent.slice(0, -1));
     }
 }
-function numberHandler(event) {
-    // if (mainDisp.textContent === '' || mainDisp.textContent === '0') 
+function numberHandler(event, val) {
+    const num = val ? val : event.target.value;
     if (calc.clearMainDisp || mainDisp.textContent === '' || mainDisp.textContent === '0') {
-        updateMainDisp(event.target.value);
+        updateMainDisp(num);
         calc.clearMainDisp = false;
         if (calc.clearMiniDisp) {
             clearMiniDisp();
             calc.clearMiniDisp = false;
         }
     } else {
-        updateMainDisp(mainDisp.textContent + event.target.value)
+        updateMainDisp(mainDisp.textContent + num)
+    }
+}
+function decimalHandler(event) {
+    if (!mainDisp.textContent.includes('.') || calc.clearMainDisp) {
+        if (mainDisp.textContent === '' || mainDisp.textContent === '0' || calc.clearMainDisp) {
+            updateMainDisp('0.');
+            calc.clearMainDisp = false;
+            if (calc.clearMiniDisp) {
+                clearMiniDisp();
+                calc.clearMiniDisp = false;
+            }
+        } else {
+            numberHandler(event, '.');
+        }
     }
 }
 function equalHandler(event) {
@@ -115,8 +167,8 @@ function equalHandler(event) {
 
     }
 }
-function operationHandler(event) {    // Transition to state 3
-    if (isValidNum(mainDisp.textContent) || isValidNum(miniDisp.textContent)) { // reject transition from state 1
+function operationHandler(event, val) {    // Transition to state 3  
+    if (isValidNum(mainDisp.textContent) || (mainDisp.textContent === '' && isValidNum(miniDisp.textContent))) { // reject transition from state 1 and invalid mainDisp
         if (isNull([calc.operand1, calc.operand2, calc.operatorTarget, calc.total])) { // accept transition from state 2, 5, and 6
             storeMainDispValIn('operand1');
         } else if (isValidNum(mainDisp.textContent)) { // Handle transition from state 4
@@ -125,27 +177,28 @@ function operationHandler(event) {    // Transition to state 3
         }
         calc.operand2 = null;
         calc.total = null;
-        calc.operatorTarget = event.target.value ? event.target : event.target.parentNode;
-        calc.clearMainDisp = true;
+        calc.operatorTarget = val ? val : event.target.value ? event.target : event.target.parentNode;
+        // calc.operatorTarget = event.target.value ? event.target : event.target.parentNode;
+        calc.clearMainDisp = false;
         calc.clearMiniDisp = false;
         updateMiniDisp();
         updateMainDisp(null);
     }
 }
-function factorialHandler(event) {
-    if (isValidNum(mainDisp.textContent) || isValidNum(miniDisp.textContent)) { //reject transition from state 1 and mainDisp 
+function factorialHandler(event, val) {
+    if (isValidNum(mainDisp.textContent) || (mainDisp.textContent === '' && isValidNum(miniDisp.textContent))) { //reject transition from state 1 and invalid mainDisp 
         if (isNull([calc.operand1, calc.operand2, calc.operatorTarget, calc.total])) { // accept transition from state 2, 5, and 6
             storeMainDispValIn('operand1');
-            calc.total = calc.operand1 > 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
-            calc.operatorTarget = event.target;
+            calc.total = calc.operand1 >= 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
+            calc.operatorTarget = val ? val : event.target;
             calc.operand2 = null;
         } else if(isValidNum(mainDisp.textContent)) { //handle transition from state 4
             storeMainDispValIn('operand2');
-            calc.operand2 = calc.operand2 > 0 ? factorial(Math.abs(calc.operand2)) : -1 * factorial(Math.abs(calc.operand2));
+            calc.operand2 = calc.operand2 >= 0 ? factorial(Math.abs(calc.operand2)) : -1 * factorial(Math.abs(calc.operand2));
             calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);     
         } else { //handle transition from state 3
-            calc.total = calc.operand1 > 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
-            calc.operatorTarget = event.target;
+            calc.total = calc.operand1 >= 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
+            calc.operatorTarget = val ? val : event.target;
         }
         updateMiniDisp();
         updateMainDisp(calc.total);
@@ -172,7 +225,8 @@ function isNull(arr) {
     return arr.every(val => !val); 
 }
 function storeMainDispValIn(key) {
-    calc[key] = Number(mainDisp.textContent.match(/-?\d+[.]?\d*/));
+
+    calc[key] = Number(mainDisp.textContent.match(/-?\d?[.]?\d*/));
 }
 function updateMiniDisp() {
 
@@ -203,7 +257,9 @@ function updateMiniDisp() {
     }
 }
 function clearMiniDisp() {
-    for (let key in calc) calc[key] = null;
+    calc.operand1 = null;
+    calc.operatorTarget = null;
+    calc.operand2 = null;
     updateMiniDisp();
 }
 function updateMainDisp(str) {
@@ -222,7 +278,7 @@ function multiply(a, b) {
     return a * b;
 }
 function divide(a, b) {
-    return a / b;
+    return b === 0 ? 'division by zero unallowed' : a / b;
 }
 function power(a, b) {
 	return a ** b;
@@ -236,10 +292,16 @@ function factorial(num) {
         }
         return total;
     }
-    return Number.NaN;
+    calc.clearMainDisp = true;
+    calc.clearMiniDisp = true;
+    return 'non-integer factorial unsupported';
 };
 function operate(operator, a, b) {
-    return Math.round(operator(a, b) * 100) / 100;
+    const result = operator(a, b);
+    if (isValidNum(result)) {
+        return Math.round(operator(a, b) * 100) / 100;    
+    }
+    return result;
 }
 
 // Startup sequence
