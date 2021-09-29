@@ -1,10 +1,33 @@
 # calculator
 
-The classic simple calculator.
+<a href="https://sumedh-inamdar.github.io/calculator/">link to page</a>
 
--><a href="https://sumedh-inamdar.github.io/calculator/">Click Here</a><-
+## Features:
+- Basic function operators (add, subtract, multiply, divide)
+- Exponents
+- Factorials (integers only)
+- Negation of inputted number (+/-)
+- Percent calculation
+    - Operand + basic operator + % (e.g. 15 + 20% = 18)
+- Mini and main display
+    - Mini display shows any operands and operators currently stored in memory
+    - Main display shows current user input and calculation total (post equals or percent)
+- Full keyboard support (hover over button for keystroke mapping)
+- Clear (or press Esc)
+    - First click clears user input shown in main display
+    - Second click clears any values stored in memory
+    - Single click will always clear mini and main display after a completed calculation
+- Backspace (or press delete)
+    - Removes previous digit input by user (as shown in main display)
+    - Values stored in memory (as shown in mini display) will get cleared if triggered after main display is clear
+    - Single click will always clear mini and main display after a completed calculation
+- Division by zero error handling
+- Non-integer factorial error handling
 
-To do list:
+
+
+
+## To do list:
 
 Bugs to fix
 
