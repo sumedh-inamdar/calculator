@@ -74,7 +74,7 @@ window.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
         return equalHandler(e);
     }
-    if (e.key === 'c') {
+    if (e.key === 'Escape') {
         return clearHandler(e);
     }
     if (e.key === 'Backspace') {

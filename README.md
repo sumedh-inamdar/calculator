@@ -32,7 +32,9 @@ HTML / CSS
 - [x] Create display 
 - [x] Create button for clear
 - [x] Create button for backspace
-- [ ] Add styling (after above complete)
+- [x] Add styling (after above complete)
+- [ ] Mobile friendly
 - [ ] Fix top margin issue when reducing viewport
-- [ ] Add description to button when hovered over
+- [x] Add description to button when hovered over
+- [ ] Add footer
 
