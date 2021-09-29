@@ -26,6 +26,7 @@ const factorialNode = document.querySelector('[value="factorial"]');
 // Display Nodes
 const mainDisp = document.querySelector('.mainDisp p');
 const miniDisp = document.querySelector('.LHS_Disp p');
+const year = document.querySelector('#year');
 
 // Add event listeners for buttons
 clear.addEventListener('click', clearHandler);
@@ -307,3 +308,4 @@ function operate(operator, a, b) {
 // Startup sequence
 mainDisp.textContent = null;
 miniDisp.textContent = null;
+year.textContent = new Date().getFullYear();
