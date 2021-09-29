@@ -62,7 +62,7 @@ main {
   flex: 1 1 40%;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   /* border: 2px solid; */
   margin: 10px 20px 0px 10px;
 }
@@ -76,7 +76,7 @@ main {
   flex: 1 1 60%;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   /* border: 2px solid; */
   margin: 0px 20px 10px 10px;
 }
@@ -297,13 +297,8 @@ footer input:hover {
   .LHS_Disp p {
     font-size: 20px;
   }
-  .mainDisp {
-    display: flex;
-    justify-content: end;
-  }
   .mainDisp p {
-    font-size: 22px;
-    margin: 0;
+    font-size: 24px;
   }
   .midB {
     width: 70px;
