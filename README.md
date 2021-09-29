@@ -60,6 +60,6 @@ HTML / CSS
 - [x] Create button for backspace
 - [x] Add styling (after above complete)
 - [x] Mobile friendly
-- [ ] Fix top margin issue when reducing viewport
+- [x] Fix top margin issue when reducing viewport
 - [x] Add description to button when hovered over
 - [x] Add footer
