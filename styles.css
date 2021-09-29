@@ -1,18 +1,29 @@
 html {
-  background-color: #3d405b;
+  background-color: hsl(234, 20%, 10%);
+}
+body {
+  position: relative;
+  min-height: 93vh;
+  /* width: 98vw; */
+  /* margin-top: 8px; */
+  margin-bottom: 0px;
+  margin: auto 0px;
 }
 main {
   display: flex;
-  height: 75vh;
-  justify-content: center;
-  align-items: center;
+  /* height: 75vh; */
+  /* justify-content: center;
+  align-items: center; */
   margin-top: 50px;
-  padding: 20px;
+  padding-bottom: 3rem;
 }
 .calcContainer {
+  position: relative;
+  margin: auto;
   display: flex;
   flex-direction: column;
-  background: hsl(234, 20%, 10%);
+  /* background: hsl(234, 20%, 10%); */
+  background-color: hsl(240, 27%, 28%);
   border: 2px solid;
   width: 460px;
   min-width: 448px;
@@ -31,7 +42,7 @@ main {
   display: flex;
   flex-direction: column;
   height: 100px;
-  background: hsl(234, 20%, 35%);
+  background: hsl(234, 20%, 20%);
   border: 2px solid;
   border-radius: 10px;
   /* box-shadow: 0px 0px 1px 1px rgb(244, 241, 222, 0.5); */
@@ -110,6 +121,9 @@ main {
     background-color: hsl(13, 68%, 60%);
     border-color: black;
     box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+    -webkit-transform: scale(1.4);
+    -ms-transform: scale(1.4);
+    transform: scale(1.4);
 }
 .midB#clear:active,
 .midB#backspace:active {
@@ -126,6 +140,9 @@ main {
     background-color: hsl(37, 79%, 60%);
     border-color: black;
     box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+    -webkit-transform: scale(1.4);
+    -ms-transform: scale(1.4);
+    transform: scale(1.4);
 }
 .midB#plusMinus:active,
 .midB#percent:active {
@@ -187,6 +204,9 @@ main {
   background-color: hsl(234, 20%, 60%);
   border-color: black;
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 .numB:active {
@@ -201,6 +221,9 @@ main {
   background: hsl(151, 24%, 60%);
   color: black;
   border-color: black;
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 .numB#equals:active {
@@ -232,6 +255,9 @@ main {
   border-color: black;
   color: black;
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  -webkit-transform: scale(1.4);
+  -ms-transform: scale(1.4);
+  transform: scale(1.4);
 }
 
 .operB:active {
@@ -250,6 +276,7 @@ footer {
   position: absolute;
   bottom: 0;
   width: 98%;
+  min-width: 300px;
   height: 2rem;
   color:hsl(37, 79%, 90%)
 }
@@ -265,18 +292,41 @@ footer input:hover {
 }
 @media screen and (max-width: 504px) {
   .calcContainer {
-    width: 370px;
-    min-width: 330px;
+    min-width: 87vw;
   }
   .LHS_Disp p {
     font-size: 20px;
+  }
+  .mainDisp {
+    display: flex;
+    justify-content: end;
   }
   .mainDisp p {
     font-size: 22px;
     margin: 0;
   }
-  .numPadCont {
-    flex: 1 1 60%;
+  .midB {
+    width: 70px;
   }
+  .bottomCont {
+    width: 98%;
+  }
+  .numB {
+    font-size: 2em;
+    margin: 0px;
+    padding: 0px;
+    
+  }
+  .operB {
+    font-size: 2em;
+    margin: 0px;
+    padding: 0px;
+  }
+  .operB#power, .operB#factorial {
+    font-size: 1.5em;
+    margin: 0px;
+    padding: 0px;
+  }
+
 
 }
