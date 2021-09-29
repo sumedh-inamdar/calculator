@@ -92,6 +92,11 @@ main {
   transition: all 0.2s;
   color: #f4f1de;
   width: 102px;
+  padding: 1px 4px;
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .midB#clear,
@@ -127,16 +132,16 @@ main {
 }
 .material-icons-outlined {
   font-family: "Material Icons";
-  /* font-weight: normal;
-    font-style: normal; */
+  font-weight: normal;
+  font-style: normal;
   font-size: 20px; /* Preferred icon size */
-  /* display: inline-block;
-    line-height: 1;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr; */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
 
   /* Support for all WebKit browsers. */
   -webkit-font-smoothing: antialiased;
