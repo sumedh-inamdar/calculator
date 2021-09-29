@@ -189,15 +189,15 @@ function factorialHandler(event, val) {
     if (isValidNum(mainDisp.textContent) || (mainDisp.textContent === '' && isValidNum(miniDisp.textContent))) { //reject transition from state 1 and invalid mainDisp 
         if (isNull([calc.operand1, calc.operand2, calc.operatorTarget, calc.total])) { // accept transition from state 2, 5, and 6
             storeMainDispValIn('operand1');
-            calc.total = calc.operand1 >= 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
+            calc.total = calc.operand1 >= 0 || !Number.isInteger(calc.operand1) ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
             calc.operatorTarget = val ? val : event.target;
             calc.operand2 = null;
         } else if(isValidNum(mainDisp.textContent)) { //handle transition from state 4
             storeMainDispValIn('operand2');
-            calc.operand2 = calc.operand2 >= 0 ? factorial(Math.abs(calc.operand2)) : -1 * factorial(Math.abs(calc.operand2));
+            calc.operand2 = calc.operand2 >= 0 || !Number.isInteger(calc.operand2) ? factorial(Math.abs(calc.operand2)) : -1 * factorial(Math.abs(calc.operand2));
             calc.total = operate(window[calc.operatorTarget.value], calc.operand1, calc.operand2);     
         } else { //handle transition from state 3
-            calc.total = calc.operand1 >= 0 ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
+            calc.total = calc.operand1 >= 0  || !Number.isInteger(calc.operand1) ? factorial(Math.abs(calc.operand1)) : -1 * factorial(Math.abs(calc.operand1));
             calc.operatorTarget = val ? val : event.target;
         }
         updateMiniDisp();
@@ -226,7 +226,7 @@ function isNull(arr) {
 }
 function storeMainDispValIn(key) {
 
-    calc[key] = Number(mainDisp.textContent.match(/-?\d?[.]?\d*/));
+    calc[key] = Number(mainDisp.textContent.match(/-?\d+[.]?\d*/));
 }
 function updateMiniDisp() {
 
