@@ -27,7 +27,7 @@ main {
   border: 2px solid;
   width: 460px;
   min-width: 448px;
-  height: 560px;
+  min-height: 560px;
   padding: 20px;
   border-radius: 15px;
   font-family: "Gemunu Libre", sans-serif;
@@ -35,13 +35,13 @@ main {
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
 }
 
-
 /* Display Container */
 
 .dispContainer {
   display: flex;
   flex-direction: column;
-  height: 100px;
+  flex: 0;
+  flex-basis: 100px;
   background: hsl(234, 20%, 20%);
   border: 2px solid;
   border-radius: 10px;
@@ -50,12 +50,12 @@ main {
   transition: all 0.2s;
 }
 .dispContainer:hover {
-    -webkit-transform: scale(1.2);
-    -ms-transform: scale(1.2);
-    transform: scale(1.2);
-    background: hsl(234, 20%, 65%);
-    color: black;
-    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  -webkit-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  transform: scale(1.2);
+  background: hsl(234, 20%, 65%);
+  color: black;
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
 }
 
 .LHS_Disp {
@@ -69,7 +69,8 @@ main {
 
 .LHS_Disp p {
   font-size: 24px;
-  margin: 0;
+  margin: 0px;
+  overflow-wrap: anywhere;
 }
 
 .mainDisp {
@@ -83,15 +84,18 @@ main {
 
 .mainDisp p {
   font-size: 34px;
-  margin: 0;
+  margin: 0px;
+  overflow-wrap: anywhere;
 }
 
 /* Mid Container */
 
 .midContainer {
   display: flex;
+  flex: 0;
+  flex-basis: 30px;
   justify-content: space-between;
-  height: 30px;
+  /* height: 30px; */
   margin: 5px 10px;
 }
 
@@ -117,17 +121,17 @@ main {
 }
 .midB#clear:hover,
 .midB#backspace:hover {
-    color: black;
-    background-color: hsl(13, 68%, 60%);
-    border-color: black;
-    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
-    -webkit-transform: scale(1.4);
-    -ms-transform: scale(1.4);
-    transform: scale(1.4);
+  color: black;
+  background-color: hsl(13, 68%, 60%);
+  border-color: black;
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  -webkit-transform: scale(1.4);
+  -ms-transform: scale(1.4);
+  transform: scale(1.4);
 }
 .midB#clear:active,
 .midB#backspace:active {
-    background-color: hsl(13, 68%, 90%);
+  background-color: hsl(13, 68%, 90%);
 }
 
 .midB#plusMinus,
@@ -136,17 +140,17 @@ main {
 }
 .midB#plusMinus:hover,
 .midB#percent:hover {
-    color: black;
-    background-color: hsl(37, 79%, 60%);
-    border-color: black;
-    box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
-    -webkit-transform: scale(1.4);
-    -ms-transform: scale(1.4);
-    transform: scale(1.4);
+  color: black;
+  background-color: hsl(37, 79%, 60%);
+  border-color: black;
+  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  -webkit-transform: scale(1.4);
+  -ms-transform: scale(1.4);
+  transform: scale(1.4);
 }
 .midB#plusMinus:active,
 .midB#percent:active {
-    background-color: hsl(37, 79%, 90%);
+  background-color: hsl(37, 79%, 90%);
 }
 .material-icons-outlined {
   font-family: "Material Icons";
@@ -177,7 +181,8 @@ main {
 
 .bottomCont {
   display: flex;
-  flex: 1 1 auto;
+  flex: 0;
+  flex-basis: 420px;
 }
 
 .numPadCont {
@@ -242,10 +247,10 @@ main {
   margin: 0px 10px;
   font-family: inherit;
   font-size: 38px;
-  height: 50px;
+  height: 55px;
   background-color: hsl(37, 79%, 20%);
   border: 2px solid #f4f1de;
-  border-radius: 25px;
+  border-radius: 55px;
   color: #f4f1de;
   transition: all 0.2s;
 }
@@ -263,13 +268,13 @@ main {
 .operB:active {
   background-color: hsl(37, 79%, 90%);
 }
-
+.operB#multiply,
 .operB#power,
 .operB#factorial {
   font-size: 28px;
 }
 footer {
-  font-family: 'Gemunu Libre', sans-serif;
+  font-family: "Gemunu Libre", sans-serif;
   font-weight: 600;
   font-size: 18px;
   text-align: center;
@@ -278,7 +283,7 @@ footer {
   width: 98%;
   min-width: 300px;
   height: 2rem;
-  color:hsl(37, 79%, 90%)
+  color: hsl(37, 79%, 90%);
 }
 
 footer input {
@@ -296,9 +301,11 @@ footer input:hover {
   }
   .LHS_Disp p {
     font-size: 20px;
+    overflow-wrap: anywhere;
   }
   .mainDisp p {
     font-size: 24px;
+    overflow-wrap: anywhere;
   }
   .midB {
     width: 70px;
@@ -310,18 +317,16 @@ footer input:hover {
     font-size: 2em;
     margin: 0px;
     padding: 0px;
-    
   }
   .operB {
     font-size: 2em;
     margin: 0px;
     padding: 0px;
   }
-  .operB#power, .operB#factorial {
+  .operB#power,
+  .operB#factorial {
     font-size: 1.5em;
     margin: 0px;
     padding: 0px;
   }
-
-
 }

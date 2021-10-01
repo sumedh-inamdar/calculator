@@ -37,6 +37,8 @@ Bugs to fix
 - [x] Division by zero -> Update division function to check for zero input and alert user accordingly
 - [x] calculation that results in zero->decimal->number
 - [x] operator with no num
+- [x] +/- with very large numbers
+- [ ] known bug: overflow wrap doesn't work with safari
 
 JS
 

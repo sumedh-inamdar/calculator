@@ -103,10 +103,7 @@ function clearHandler(event) {
 }
 function plusMinusHandler(event) {
     if (isValidNum(mainDisp.textContent)) {
-        let numOnDisp = mainDisp.textContent.match(/-?\d+[.]?\d*/);
-        numOnDisp *= -1;
-        // numOnDisp = numOnDisp < 0 ? '(' + numOnDisp + ')' : numOnDisp;
-        updateMainDisp(numOnDisp);
+        updateMainDisp(mainDisp.textContent * -1);
     }
 }
 function percentHandler(event) {
@@ -168,7 +165,7 @@ function equalHandler(event) {
 
     }
 }
-function operationHandler(event, val) {    // Transition to state 3  
+function operationHandler(event, val) { // Transition to state 3  
     if (isValidNum(mainDisp.textContent) || (mainDisp.textContent === '' && isValidNum(miniDisp.textContent))) { // reject transition from state 1 and invalid mainDisp
         if (isNull([calc.operand1, calc.operand2, calc.operatorTarget, calc.total])) { // accept transition from state 2, 5, and 6
             storeMainDispValIn('operand1');
@@ -219,18 +216,16 @@ function resetCalc() {
     calc.clearMiniDisp = true;
 }
 function isValidNum(input) {
-    const regex = /-?\d+[.]?\d*/;
+    const regex = /-?\d+[.]?\d*(?:e[+])?\d*/;
     return regex.test(input);
 }
 function isNull(arr) {
     return arr.every(val => !val); 
 }
 function storeMainDispValIn(key) {
-
-    calc[key] = Number(mainDisp.textContent.match(/-?\d+[.]?\d*/));
+    calc[key] = Number(mainDisp.textContent.match(/-?\d+[.]?\d*(?:e[+])?\d*/));
 }
 function updateMiniDisp() {
-
     if (calc.operand1 !== null) {
         miniDisp.textContent = calc.operand1 < 0 ? '(' + calc.operand1 + ')' : calc.operand1;     
     } else {
@@ -247,7 +242,7 @@ function updateMiniDisp() {
             miniDisp.textContent += '! = ';
 
         } else {
-            miniDisp.textContent += ' ' + calc.operatorTarget.textContent + ' ';        
+            miniDisp.textContent += ' ' + calc.operatorTarget.textContent.toLowerCase() + ' ';        
         }
     }
 
